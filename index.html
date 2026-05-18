@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Terminal Bundle | Мощный. Красивый. Твой.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --terminal-bg: #161b22;
+            --accent: #58a6ff;
+            --text: #c9d1d9;
+            --text-dim: #8b949e;
+            --green: #3fb950;
+            --red: #f85149;
+            --yellow: #d29922;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #58a6ff, #bc8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+        }
+
+        /* Terminal Simulation */
+        .terminal-window {
+            background-color: var(--terminal-bg);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            margin-bottom: 60px;
+            border: 1px solid #30363d;
+        }
+
+        .terminal-header {
+            background-color: #21262d;
+            padding: 10px 15px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background-color: var(--red); }
+        .dot.yellow { background-color: var(--yellow); }
+        .dot.green { background-color: var(--green); }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            min-height: 300px;
+            color: #e6edf3;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background-color: var(--accent);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .cmd-line { margin-bottom: 10px; }
+        .prompt { color: var(--green); font-weight: bold; }
+        .output { color: var(--text-dim); margin-left: 15px; margin-bottom: 15px; white-space: pre-wrap; }
+
+        /* Installation Section */
+        .install-box {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 60px;
+        }
+
+        code { font-family: 'Fira Code', monospace; color: var(--accent); }
+
+        .copy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover { opacity: 0.8; }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: #161b22;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .feature-card h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .glitch { color: var(--green); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Beautiful Terminal Bundle</h1>
+        <p class="subtitle">Ультимативный набор для прокачки твоего Linux терминала до уровня PRO.</p>
+    </header>
+
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="terminal-body" id="terminal">
+            <!-- Content will be typed here by JS -->
+        </div>
+    </div>
+
+    <div class="install-box">
+        <code id="install-cmd">git clone https://github.com/M0NDsuChTiG/beautiful-terminal.git && cd beautiful-terminal && bash install.sh</code>
+        <button class="copy-btn" onclick="copyInstall()">Копировать</button>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>🎨 Визуальный экстаз</h3>
+            <p>Zsh с темой 'ys', иконки через <b>LSD</b> и подсветка синтаксиса делают работу приятной глазу.</p>
+        </div>
+        <div class="feature-card">
+            <h3>⚡ Скорость мысли</h3>
+            <p>Интеллектуальное автодополнение и нечеткий поиск через <b>FZF</b> позволяют находить команды за доли секунды.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🛠 Мощный инструментарий</h3>
+            <p>В комплекте: <b>Btop</b>, <b>Fastfetch</b>, <b>Lazygit</b>, <b>Kmon</b>, <b>Zoxide</b> и многое другое.</p>
+        </div>
+        <div class="feature-card">
+            <h3>📂 Умная навигация</h3>
+            <p>Забудьте про скучный <code>cd</code>. Используйте <b>Zoxide</b>, который запоминает ваши любимые пути.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Создано с любовью к открытому коду и терминалам. <br> Настроено с помощью <b>Gemini CLI</b> 🤖</p>
+    </footer>
+</div>
+
+<script>
+    const terminal = document.getElementById('terminal');
+    const lines = [
+        { type: 'cmd', text: 'fastfetch' },
+        { type: 'out', text: 'OS: Linux (Beautiful Edition)\nShell: zsh 5.9\nTerminal: Pro Tools v9\nUptime: 100% Productivity' },
+        { type: 'cmd', text: 'ls -la' },
+        { type: 'out', text: '📂 .config\n📂 .oh-my-zsh\n📜 .zshrc\n🚀 install.sh' },
+        { type: 'cmd', text: 'echo "Ready for work."' },
+        { type: 'out', text: 'Ready for work.' }
+    ];
+
+    let lineIdx = 0;
+    let charIdx = 0;
+
+    function type() {
+        if (lineIdx < lines.length) {
+            const line = lines[lineIdx];
+            if (charIdx === 0) {
+                const div = document.createElement('div');
+                div.className = line.type === 'cmd' ? 'cmd-line' : 'output';
+                if (line.type === 'cmd') {
+                    div.innerHTML = '<span class="prompt">➜</span> <span class="text"></span><span class="cursor"></span>';
+                } else {
+                    div.innerHTML = line.text;
+                    terminal.appendChild(div);
+                    lineIdx++;
+                    setTimeout(type, 1000);
+                    return;
+                }
+                terminal.appendChild(div);
+            }
+
+            const currentLineElement = terminal.lastElementChild.querySelector('.text');
+            if (charIdx < line.text.length) {
+                currentLineElement.textContent += line.text[charIdx];
+                charIdx++;
+                setTimeout(type, 50);
+            } else {
+                terminal.lastElementChild.querySelector('.cursor').remove();
+                lineIdx++;
+                charIdx = 0;
+                setTimeout(type, 1000);
+            }
+        }
+    }
+
+    function copyInstall() {
+        const cmd = document.getElementById('install-cmd').innerText;
+        navigator.clipboard.writeText(cmd);
+        alert('Команда скопирована!');
+    }
+
+    type();
+</script>
+
+</body>
+</html>
