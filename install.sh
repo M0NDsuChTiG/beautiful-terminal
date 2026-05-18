@@ -8,7 +8,7 @@ echo "🚀 Начинаем локальную установку красиво
 # 1. Установка системных зависимостей
 echo "📦 Установка зависимостей (нужен sudo)..."
 sudo apt update
-sudo apt install -y zsh grc git curl whois jq mtr-tiny bind9-host grepcidr
+sudo apt install -y zsh grc git curl whois jq mtr-tiny bind9-host grepcidr tealdeer
 
 # 2. Установка Oh My Zsh (если еще нет)
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -37,6 +37,10 @@ if [ "$SHELL" != "$(which zsh)" ]; then
     echo "🔄 Меняем оболочку на Zsh..."
     sudo chsh -s $(which zsh) $USER
 fi
+
+# 7. Обновление кэша tldr (tealdeer)
+echo "📚 Обновляем кэш tldr..."
+tldr --update
 
 echo "✅ ГОТОВО! Всё установлено из локальных файлов проекта."
 echo "🔄 Пожалуйста, перезапустите терминал или введите 'zsh'."
