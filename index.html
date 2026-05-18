@@ -10,11 +10,12 @@
             --bg: #0d1117;
             --terminal-bg: #161b22;
             --accent: #58a6ff;
-            --text: #c9d1d9;
+            --text: #e6edf3;
             --text-dim: #8b949e;
             --green: #3fb950;
             --red: #f85149;
             --yellow: #d29922;
+            --modal-bg: #21262d;
         }
 
         body {
@@ -109,22 +110,25 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 60px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
-        code { font-family: 'Fira Code', monospace; color: var(--accent); }
+        code { font-family: 'Fira Code', monospace; color: var(--accent); word-break: break-all; }
 
         .copy-btn {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: opacity 0.2s;
+            transition: 0.2s;
+            white-space: nowrap;
         }
 
-        .copy-btn:hover { opacity: 0.8; }
+        .copy-btn:hover { transform: scale(1.05); background-color: #79c0ff; }
 
         /* Features Grid */
         .features {
@@ -138,18 +142,70 @@
             padding: 25px;
             border-radius: 10px;
             border: 1px solid #30363d;
-            transition: transform 0.2s;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
             border-color: var(--accent);
+            background: #1c2128;
         }
 
         .feature-card h3 {
             margin-top: 0;
             color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
+        .feature-card h3::after {
+            content: '➔';
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--modal-bg);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            border: 1px solid #444c56;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--text-dim);
+            cursor: pointer;
+        }
+
+        .modal-body h2 { color: var(--accent); margin-top: 0; }
+        .modal-body ul { padding-left: 20px; }
+        .modal-body li { margin-bottom: 10px; }
+        .modal-body b { color: var(--green); }
 
         footer {
             text-align: center;
@@ -158,7 +214,15 @@
             font-size: 0.9rem;
         }
 
-        .glitch { color: var(--green); }
+        .badge {
+            background: #238636;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -166,7 +230,7 @@
 <div class="container">
     <header>
         <h1>Beautiful Terminal Bundle</h1>
-        <p class="subtitle">Ультимативный набор для прокачки твоего Linux терминала до уровня PRO.</p>
+        <p class="subtitle">Ультимативный набор для прокачки твоего Linux терминала до уровня PRO. <span class="badge">Toolkits 1-9</span></p>
     </header>
 
     <div class="terminal-window">
@@ -175,32 +239,30 @@
             <div class="dot yellow"></div>
             <div class="dot green"></div>
         </div>
-        <div class="terminal-body" id="terminal">
-            <!-- Content will be typed here by JS -->
-        </div>
+        <div class="terminal-body" id="terminal"></div>
     </div>
 
     <div class="install-box">
         <code id="install-cmd">git clone https://github.com/M0NDsuChTiG/beautiful-terminal.git && cd beautiful-terminal && bash install.sh</code>
-        <button class="copy-btn" onclick="copyInstall()">Копировать</button>
+        <button class="copy-btn" onclick="copyInstall()">Копировать команду</button>
     </div>
 
     <div class="features">
-        <div class="feature-card">
+        <div class="feature-card" onclick="openModal('visual')">
             <h3>🎨 Визуальный экстаз</h3>
-            <p>Zsh с темой 'ys', иконки через <b>LSD</b> и подсветка синтаксиса делают работу приятной глазу.</p>
+            <p>Zsh с темой 'ys', иконки через LSD и подсветка синтаксиса делают работу приятной глазу.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" onclick="openModal('speed')">
             <h3>⚡ Скорость мысли</h3>
-            <p>Интеллектуальное автодополнение и нечеткий поиск через <b>FZF</b> позволяют находить команды за доли секунды.</p>
+            <p>Интеллектуальное автодополнение и нечеткий поиск через FZF позволяют находить команды за доли секунды.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" onclick="openModal('tools')">
             <h3>🛠 Мощный инструментарий</h3>
-            <p>В комплекте: <b>Btop</b>, <b>Fastfetch</b>, <b>Lazygit</b>, <b>Kmon</b>, <b>Zoxide</b> и многое другое.</p>
+            <p>В комплекте: Btop, Fastfetch, Lazygit, Kmon, Zoxide и многое другое.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" onclick="openModal('nav')">
             <h3>📂 Умная навигация</h3>
-            <p>Забудьте про скучный <code>cd</code>. Используйте <b>Zoxide</b>, который запоминает ваши любимые пути.</p>
+            <p>Забудьте про скучный cd. Используйте Zoxide, который запоминает ваши любимые пути.</p>
         </div>
     </div>
 
@@ -209,15 +271,86 @@
     </footer>
 </div>
 
+<!-- Modal -->
+<div class="modal" id="infoModal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-body" id="modalBody">
+            <!-- Content filled by JS -->
+        </div>
+    </div>
+</div>
+
 <script>
+    const modalData = {
+        visual: {
+            title: "🎨 Визуальный экстаз",
+            content: `
+                <p>Мы полностью переработали внешний вид консоли:</p>
+                <ul>
+                    <li><b>Oh My Zsh + Тема "ys"</b>: Чистый, информативный и цветной интерфейс.</li>
+                    <li><b>LSD</b>: Замена ls с крутыми иконками для каждого типа файлов.</li>
+                    <li><b>Bat</b>: Чтение файлов с подсветкой синтаксиса как в IDE.</li>
+                    <li><b>GRC</b>: Автоматическая раскраска вывода ip, ping, df и других команд.</li>
+                </ul>
+            `
+        },
+        speed: {
+            title: "⚡ Скорость мысли",
+            content: `
+                <p>Экономим ваше время на каждом нажатии клавиш:</p>
+                <ul>
+                    <li><b>Zsh-autosuggestions</b>: Подсказывает команды на основе вашей истории. Просто нажмите стрелку вправо!</li>
+                    <li><b>FZF (Ctrl+R)</b>: Мгновенный поиск по истории команд. Больше не нужно вбивать одно и то же.</li>
+                    <li><b>Zsh-syntax-highlighting</b>: Вы сразу видите, если ошиблись в команде (она станет красной).</li>
+                </ul>
+            `
+        },
+        tools: {
+            title: "🛠 Мощный инструментарий",
+            content: `
+                <p>Весь софт для профи в одном флаконе:</p>
+                <ul>
+                    <li><b>Lazygit</b>: Полноценный UI для Git в терминале.</li>
+                    <li><b>Btop</b>: Лучший монитор ресурсов (CPU, RAM, Network).</li>
+                    <li><b>Kmon</b>: Управление модулями и мониторинг ядра Linux.</li>
+                    <li><b>Fastfetch</b>: Красивое лого и информация о системе при старте.</li>
+                    <li><b>Micro</b>: Редактор, который понимает Ctrl+C / Ctrl+V.</li>
+                </ul>
+            `
+        },
+        nav: {
+            title: "📂 Умная навигация",
+            content: `
+                <p>Перемещайтесь по файловой системе быстрее звука:</p>
+                <ul>
+                    <li><b>Zoxide (z)</b>: Умная замена cd. Напишите <b>z proj</b> и вы сразу окажетесь в /home/user/work/my-project.</li>
+                    <li><b>FD (fdfind)</b>: Найдите любой файл в 10 раз быстрее, чем обычной командой find.</li>
+                    <li><b>Duf</b>: Красивая статистика по дискам в виде цветных таблиц.</li>
+                </ul>
+            `
+        }
+    };
+
+    function openModal(id) {
+        const data = modalData[id];
+        document.getElementById('modalBody').innerHTML = `<h2>${data.title}</h2>${data.content}`;
+        document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('infoModal').style.display = 'none';
+    }
+
+    // Terminal logic
     const terminal = document.getElementById('terminal');
     const lines = [
         { type: 'cmd', text: 'fastfetch' },
         { type: 'out', text: 'OS: Linux (Beautiful Edition)\nShell: zsh 5.9\nTerminal: Pro Tools v9\nUptime: 100% Productivity' },
         { type: 'cmd', text: 'ls -la' },
         { type: 'out', text: '📂 .config\n📂 .oh-my-zsh\n📜 .zshrc\n🚀 install.sh' },
-        { type: 'cmd', text: 'echo "Ready for work."' },
-        { type: 'out', text: 'Ready for work.' }
+        { type: 'cmd', text: 'echo "Ready for Toolkits 9!"' },
+        { type: 'out', text: 'Ready for Toolkits 9!' }
     ];
 
     let lineIdx = 0;
@@ -235,7 +368,7 @@
                     div.innerHTML = line.text;
                     terminal.appendChild(div);
                     lineIdx++;
-                    setTimeout(type, 1000);
+                    setTimeout(type, 800);
                     return;
                 }
                 terminal.appendChild(div);
@@ -245,12 +378,13 @@
             if (charIdx < line.text.length) {
                 currentLineElement.textContent += line.text[charIdx];
                 charIdx++;
-                setTimeout(type, 50);
+                setTimeout(type, 40);
             } else {
-                terminal.lastElementChild.querySelector('.cursor').remove();
+                const cursor = terminal.lastElementChild.querySelector('.cursor');
+                if (cursor) cursor.remove();
                 lineIdx++;
                 charIdx = 0;
-                setTimeout(type, 1000);
+                setTimeout(type, 800);
             }
         }
     }
@@ -258,7 +392,7 @@
     function copyInstall() {
         const cmd = document.getElementById('install-cmd').innerText;
         navigator.clipboard.writeText(cmd);
-        alert('Команда скопирована!');
+        alert('Команда скопирована! Вставьте её в терминал.');
     }
 
     type();
