@@ -103,4 +103,17 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls="lsd"
+alias cat="batcat --paging=never"
+alias top="btop"
+
+# FZF integration
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+
+# Zoxide initialization
+eval "$(zoxide init zsh)"
+
+# FD alias (Ubuntu specific name fix)
+alias fd='fdfind'
+
 export TERM="xterm-256color"
