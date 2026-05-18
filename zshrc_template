@@ -116,4 +116,12 @@ eval "$(zoxide init zsh)"
 # FD alias (Ubuntu specific name fix)
 alias fd='fdfind'
 
+# Toolkits 9 aliases
+alias lg="lazygit"
+alias df="duf"
+alias ps="procs"
+
+# Startup info
+fastfetch
+
 export TERM="xterm-256color"
