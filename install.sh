@@ -8,7 +8,7 @@ echo "🚀 Начинаем локальную установку красиво
 # 1. Установка системных зависимостей
 echo "📦 Установка зависимостей (нужен sudo)..."
 sudo apt update
-sudo apt install -y zsh grc git curl whois jq mtr-tiny bind9-host grepcidr tealdeer lsd bat fzf btop fd-find zoxide
+sudo apt install -y zsh grc git curl whois jq mtr-tiny bind9-host grepcidr tealdeer lsd bat fzf btop fd-find zoxide kmon
 
 # 2. Установка Oh My Zsh (если еще нет)
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
