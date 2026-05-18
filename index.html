@@ -36,10 +36,37 @@
         header {
             text-align: center;
             margin-bottom: 60px;
+            position: relative;
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: var(--text-dim);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(88, 166, 255, 0.1);
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 10px;
             background: linear-gradient(90deg, #58a6ff, #bc8cff);
             -webkit-background-clip: text;
@@ -78,7 +105,7 @@
             padding: 20px;
             font-family: 'Fira Code', monospace;
             font-size: 14px;
-            min-height: 300px;
+            min-height: 280px;
             color: #e6edf3;
         }
 
@@ -92,9 +119,7 @@
             margin-left: 4px;
         }
 
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 50% { opacity: 0; } }
 
         .cmd-line { margin-bottom: 10px; }
         .prompt { color: var(--green); font-weight: bold; }
@@ -229,8 +254,12 @@
 
 <div class="container">
     <header>
-        <h1>Beautiful Terminal Bundle</h1>
-        <p class="subtitle">Ультимативный набор для прокачки твоего Linux терминала до уровня PRO. <span class="badge">Toolkits 1-9</span></p>
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <h1 data-i18n="title">Beautiful Terminal Bundle</h1>
+        <p class="subtitle" data-i18n="subtitle">Ультимативный набор для прокачки твоего Linux терминала до уровня PRO. <span class="badge">Toolkits 1-9</span></p>
     </header>
 
     <div class="terminal-window">
@@ -244,30 +273,30 @@
 
     <div class="install-box">
         <code id="install-cmd">git clone https://github.com/M0NDsuChTiG/beautiful-terminal.git && cd beautiful-terminal && bash install.sh</code>
-        <button class="copy-btn" onclick="copyInstall()">Копировать команду</button>
+        <button class="copy-btn" id="copy-btn" onclick="copyInstall()" data-i18n="copyBtn">Копировать команду</button>
     </div>
 
     <div class="features">
         <div class="feature-card" onclick="openModal('visual')">
-            <h3>🎨 Визуальный экстаз</h3>
-            <p>Zsh с темой 'ys', иконки через LSD и подсветка синтаксиса делают работу приятной глазу.</p>
+            <h3 data-i18n="feat1_title">🎨 Визуальный экстаз</h3>
+            <p data-i18n="feat1_desc">Zsh с темой 'ys', иконки через LSD и подсветка синтаксиса делают работу приятной глазу.</p>
         </div>
         <div class="feature-card" onclick="openModal('speed')">
-            <h3>⚡ Скорость мысли</h3>
-            <p>Интеллектуальное автодополнение и нечеткий поиск через FZF позволяют находить команды за доли секунды.</p>
+            <h3 data-i18n="feat2_title">⚡ Скорость мысли</h3>
+            <p data-i18n="feat2_desc">Интеллектуальное автодополнение и нечеткий поиск через FZF позволяют находить команды за доли секунды.</p>
         </div>
         <div class="feature-card" onclick="openModal('tools')">
-            <h3>🛠 Мощный инструментарий</h3>
-            <p>В комплекте: Btop, Fastfetch, Lazygit, Kmon, Zoxide и многое другое.</p>
+            <h3 data-i18n="feat3_title">🛠 Мощный инструментарий</h3>
+            <p data-i18n="feat3_desc">В комплекте: Btop, Fastfetch, Lazygit, Kmon, Zoxide и многое другое.</p>
         </div>
         <div class="feature-card" onclick="openModal('nav')">
-            <h3>📂 Умная навигация</h3>
-            <p>Забудьте про скучный cd. Используйте Zoxide, который запоминает ваши любимые пути.</p>
+            <h3 data-i18n="feat4_title">📂 Умная навигация</h3>
+            <p data-i18n="feat4_desc">Забудьте про скучный cd. Используйте Zoxide, который запоминает ваши любимые пути.</p>
         </div>
     </div>
 
     <footer>
-        <p>Создано с любовью к открытому коду и терминалам. <br> Настроено с помощью <b>Gemini CLI</b> 🤖</p>
+        <p data-i18n="footer">Создано с любовью к открытому коду и терминалам. <br> Настроено с помощью <b>Gemini CLI</b> 🤖</p>
     </footer>
 </div>
 
@@ -275,65 +304,103 @@
 <div class="modal" id="infoModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="modal-body" id="modalBody">
-            <!-- Content filled by JS -->
-        </div>
+        <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
 
 <script>
-    const modalData = {
-        visual: {
-            title: "🎨 Визуальный экстаз",
-            content: `
-                <p>Мы полностью переработали внешний вид консоли:</p>
-                <ul>
-                    <li><b>Oh My Zsh + Тема "ys"</b>: Чистый, информативный и цветной интерфейс.</li>
-                    <li><b>LSD</b>: Замена ls с крутыми иконками для каждого типа файлов.</li>
-                    <li><b>Bat</b>: Чтение файлов с подсветкой синтаксиса как в IDE.</li>
-                    <li><b>GRC</b>: Автоматическая раскраска вывода ip, ping, df и других команд.</li>
-                </ul>
-            `
+    const translations = {
+        ru: {
+            title: "Beautiful Terminal Bundle",
+            subtitle: "Ультимативный набор для прокачки твоего Linux терминала до уровня PRO. <span class='badge'>Toolkits 1-9</span>",
+            copyBtn: "Копировать команду",
+            copyAlert: "Команда скопирована! Вставьте её в терминал.",
+            feat1_title: "🎨 Визуальный экстаз",
+            feat1_desc: "Zsh с темой 'ys', иконки через LSD и подсветка синтаксиса делают работу приятной глазу.",
+            feat2_title: "⚡ Скорость мысли",
+            feat2_desc: "Интеллектуальное автодополнение и нечеткий поиск через FZF позволяют находить команды за доли секунды.",
+            feat3_title: "🛠 Мощный инструментарий",
+            feat3_desc: "В комплекте: Btop, Fastfetch, Lazygit, Kmon, Zoxide и многое другое.",
+            feat4_title: "📂 Умная навигация",
+            feat4_desc: "Забудьте про скучный cd. Используйте Zoxide, который запоминает ваши любимые пути.",
+            footer: "Создано с любовью к открытому коду и терминалам. <br> Настроено с помощью <b>Gemini CLI</b> 🤖",
+            modals: {
+                visual: {
+                    title: "🎨 Визуальный экстаз",
+                    content: `<p>Мы полностью переработали внешний вид консоли:</p><ul><li><b>Oh My Zsh + Тема "ys"</b>: Чистый, информативный и цветной интерфейс.</li><li><b>LSD</b>: Замена ls с крутыми иконками для каждого типа файлов.</li><li><b>Bat</b>: Чтение файлов с подсветкой синтаксиса как в IDE.</li><li><b>GRC</b>: Автоматическая раскраска вывода ip, ping, df и других команд.</li></ul>`
+                },
+                speed: {
+                    title: "⚡ Скорость мысли",
+                    content: `<p>Экономим ваше время на каждом нажатии клавиш:</p><ul><li><b>Zsh-autosuggestions</b>: Подсказывает команды на основе вашей истории.</li><li><b>FZF (Ctrl+R)</b>: Мгновенный поиск по истории команд.</li><li><b>Zsh-syntax-highlighting</b>: Вы сразу видите ошибки (команда станет красной).</li></ul>`
+                },
+                tools: {
+                    title: "🛠 Мощный инструментарий",
+                    content: `<p>Весь софт для профи в одном флаконе:</p><ul><li><b>Lazygit</b>: Полноценный UI для Git в терминале.</li><li><b>Btop</b>: Лучший монитор ресурсов (CPU, RAM, Network).</li><li><b>Kmon</b>: Управление модулями и мониторинг ядра Linux.</li><li><b>Fastfetch</b>: Красивое лого и информация о системе.</li><li><b>Micro</b>: Редактор с поддержкой мыши и Ctrl+C / Ctrl+V.</li></ul>`
+                },
+                nav: {
+                    title: "📂 Умная навигация",
+                    content: `<p>Перемещайтесь быстрее звука:</p><ul><li><b>Zoxide (z)</b>: Умная замена cd. Запоминает ваши пути.</li><li><b>FD (fdfind)</b>: Найдите любой файл в 10 раз быстрее, чем обычной командой find.</li><li><b>Duf</b>: Красивая статистика по дискам в виде цветных таблиц.</li></ul>`
+                }
+            }
         },
-        speed: {
-            title: "⚡ Скорость мысли",
-            content: `
-                <p>Экономим ваше время на каждом нажатии клавиш:</p>
-                <ul>
-                    <li><b>Zsh-autosuggestions</b>: Подсказывает команды на основе вашей истории. Просто нажмите стрелку вправо!</li>
-                    <li><b>FZF (Ctrl+R)</b>: Мгновенный поиск по истории команд. Больше не нужно вбивать одно и то же.</li>
-                    <li><b>Zsh-syntax-highlighting</b>: Вы сразу видите, если ошиблись в команде (она станет красной).</li>
-                </ul>
-            `
-        },
-        tools: {
-            title: "🛠 Мощный инструментарий",
-            content: `
-                <p>Весь софт для профи в одном флаконе:</p>
-                <ul>
-                    <li><b>Lazygit</b>: Полноценный UI для Git в терминале.</li>
-                    <li><b>Btop</b>: Лучший монитор ресурсов (CPU, RAM, Network).</li>
-                    <li><b>Kmon</b>: Управление модулями и мониторинг ядра Linux.</li>
-                    <li><b>Fastfetch</b>: Красивое лого и информация о системе при старте.</li>
-                    <li><b>Micro</b>: Редактор, который понимает Ctrl+C / Ctrl+V.</li>
-                </ul>
-            `
-        },
-        nav: {
-            title: "📂 Умная навигация",
-            content: `
-                <p>Перемещайтесь по файловой системе быстрее звука:</p>
-                <ul>
-                    <li><b>Zoxide (z)</b>: Умная замена cd. Напишите <b>z proj</b> и вы сразу окажетесь в /home/user/work/my-project.</li>
-                    <li><b>FD (fdfind)</b>: Найдите любой файл в 10 раз быстрее, чем обычной командой find.</li>
-                    <li><b>Duf</b>: Красивая статистика по дискам в виде цветных таблиц.</li>
-                </ul>
-            `
+        en: {
+            title: "Beautiful Terminal Bundle",
+            subtitle: "The ultimate toolkit to level up your Linux terminal to PRO. <span class='badge'>Toolkits 1-9</span>",
+            copyBtn: "Copy command",
+            copyAlert: "Command copied! Paste it into your terminal.",
+            feat1_title: "🎨 Visual Ecstasy",
+            feat1_desc: "Zsh with 'ys' theme, LSD icons, and syntax highlighting make working a pleasure.",
+            feat2_title: "⚡ Speed of Thought",
+            feat2_desc: "Smart autosuggestions and fuzzy search via FZF let you find commands in a split second.",
+            feat3_title: "🛠 Power Tools",
+            feat3_desc: "Includes: Btop, Fastfetch, Lazygit, Kmon, Zoxide, and much more.",
+            feat4_title: "📂 Smart Navigation",
+            feat4_desc: "Forget boring cd. Use Zoxide, which remembers your favorite paths.",
+            footer: "Created with love for open source and terminals. <br> Powered by <b>Gemini CLI</b> 🤖",
+            modals: {
+                visual: {
+                    title: "🎨 Visual Ecstasy",
+                    content: `<p>We completely redesigned the console look:</p><ul><li><b>Oh My Zsh + "ys" Theme</b>: Clean, informative, and colorful interface.</li><li><b>LSD</b>: ls replacement with cool icons for each file type.</li><li><b>Bat</b>: Read files with syntax highlighting like in an IDE.</li><li><b>GRC</b>: Automatic coloring for ip, ping, df, and other commands.</li></ul>`
+                },
+                speed: {
+                    title: "⚡ Speed of Thought",
+                    content: `<p>Saving your time on every keystroke:</p><ul><li><b>Zsh-autosuggestions</b>: Suggests commands based on your history.</li><li><b>FZF (Ctrl+R)</b>: Instant search through command history.</li><li><b>Zsh-syntax-highlighting</b>: Spot mistakes immediately (command turns red).</li></ul>`
+                },
+                tools: {
+                    title: "🛠 Power Tools",
+                    content: `<p>All pro software in one place:</p><ul><li><b>Lazygit</b>: Full Git UI right in your terminal.</li><li><b>Btop</b>: The best resource monitor (CPU, RAM, Network).</li><li><b>Kmon</b>: Kernel module manager and activity monitor.</li><li><b>Fastfetch</b>: Beautiful logo and system info on startup.</li><li><b>Micro</b>: Editor with mouse support and Ctrl+C / Ctrl+V.</li></ul>`
+                },
+                nav: {
+                    title: "📂 Smart Navigation",
+                    content: `<p>Move through your filesystem faster than sound:</p><ul><li><b>Zoxide (z)</b>: Smart cd replacement. Remembers your paths.</li><li><b>FD (fdfind)</b>: Find any file 10x faster than the standard find command.</li><li><b>Duf</b>: Beautiful disk statistics in colorful tables.</li></ul>`
+                }
+            }
         }
     };
 
+    let currentLang = localStorage.getItem('lang') || 'ru';
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+        
+        // Update buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+        });
+
+        // Update static text
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            el.innerHTML = translations[lang][key];
+        });
+
+        // Update page title
+        document.title = lang === 'ru' ? "Beautiful Terminal Bundle | Мощный. Красивый. Твой." : "Beautiful Terminal Bundle | Powerful. Beautiful. Yours.";
+    }
+
     function openModal(id) {
-        const data = modalData[id];
+        const data = translations[currentLang].modals[id];
         document.getElementById('modalBody').innerHTML = `<h2>${data.title}</h2>${data.content}`;
         document.getElementById('infoModal').style.display = 'flex';
     }
@@ -342,7 +409,13 @@
         document.getElementById('infoModal').style.display = 'none';
     }
 
-    // Terminal logic
+    function copyInstall() {
+        const cmd = document.getElementById('install-cmd').innerText;
+        navigator.clipboard.writeText(cmd);
+        alert(translations[currentLang].copyAlert);
+    }
+
+    // Terminal logic (remains mostly same, could be localized too but usually console is EN)
     const terminal = document.getElementById('terminal');
     const lines = [
         { type: 'cmd', text: 'fastfetch' },
@@ -389,12 +462,8 @@
         }
     }
 
-    function copyInstall() {
-        const cmd = document.getElementById('install-cmd').innerText;
-        navigator.clipboard.writeText(cmd);
-        alert('Команда скопирована! Вставьте её в терминал.');
-    }
-
+    // Init language
+    setLang(currentLang);
     type();
 </script>
 
