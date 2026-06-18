@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beautiful Terminal Bundle | Мощный. Красивый. Твой.</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0d1117;
@@ -16,7 +16,11 @@
             --red: #f85149;
             --yellow: #d29922;
             --modal-bg: #21262d;
+            --card-border: #30363d;
+            --card-hover: #1c2128;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -39,7 +43,6 @@
             position: relative;
         }
 
-        /* Language Switcher */
         .lang-switch {
             position: absolute;
             top: 0;
@@ -78,7 +81,13 @@
             color: var(--text-dim);
         }
 
-        /* Terminal Simulation */
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--accent);
+        }
+
         .terminal-window {
             background-color: var(--terminal-bg);
             border-radius: 12px;
@@ -125,7 +134,6 @@
         .prompt { color: var(--green); font-weight: bold; }
         .output { color: var(--text-dim); margin-left: 15px; margin-bottom: 15px; white-space: pre-wrap; }
 
-        /* Installation Section */
         .install-box {
             background: #161b22;
             padding: 20px;
@@ -149,17 +157,20 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
+            transition: all 0.2s;
             white-space: nowrap;
+            position: relative;
+            min-width: 140px;
         }
 
         .copy-btn:hover { transform: scale(1.05); background-color: #79c0ff; }
+        .copy-btn.copied { background: var(--green); }
 
-        /* Features Grid */
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            margin-bottom: 60px;
         }
 
         .feature-card {
@@ -169,7 +180,6 @@
             border: 1px solid #30363d;
             cursor: pointer;
             transition: all 0.2s;
-            position: relative;
         }
 
         .feature-card:hover {
@@ -192,7 +202,131 @@
             opacity: 0.5;
         }
 
-        /* Modal Styles */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .platform-card {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            background: #1c2128;
+        }
+
+        .platform-icon {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .platform-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .platform-desc {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        .hotkeys-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+            margin-bottom: 60px;
+        }
+
+        .hotkey-item {
+            background: #161b22;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+
+        .hotkey-item:hover {
+            border-color: var(--accent);
+            background: #1c2128;
+        }
+
+        kbd {
+            background: #21262d;
+            border: 1px solid #444c56;
+            border-radius: 5px;
+            padding: 3px 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            white-space: nowrap;
+            box-shadow: 0 1px 0 #444c56;
+        }
+
+        .hotkey-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .badge {
+            background: #238636;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        .badge.purple {
+            background: #8957e5;
+        }
+
+        .badge.orange {
+            background: #d29922;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid #21262d;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #79c0ff;
+            text-decoration: underline;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -232,21 +366,16 @@
         .modal-body li { margin-bottom: 10px; }
         .modal-body b { color: var(--green); }
 
-        footer {
-            text-align: center;
-            margin-top: 80px;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        .badge {
-            background: #238636;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            vertical-align: middle;
-            margin-left: 10px;
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .lang-switch { position: static; justify-content: center; margin-bottom: 20px; }
+            .container { padding: 20px 12px; }
+            .install-box { flex-direction: column; align-items: stretch; }
+            .copy-btn { width: 100%; }
+            .features { grid-template-columns: 1fr; }
+            .platforms-grid { grid-template-columns: 1fr 1fr; }
+            .hotkeys-grid { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
@@ -276,6 +405,7 @@
         <button class="copy-btn" id="copy-btn" onclick="copyInstall()" data-i18n="copyBtn">Копировать команду</button>
     </div>
 
+    <h2 class="section-title" data-i18n="featSection">✨ Возможности</h2>
     <div class="features">
         <div class="feature-card" onclick="openModal('visual')">
             <h3 data-i18n="feat1_title">🎨 Визуальный экстаз</h3>
@@ -295,12 +425,39 @@
         </div>
     </div>
 
+    <h2 class="section-title" data-i18n="platformSection">💻 Поддерживаемые платформы</h2>
+    <div class="platforms-grid">
+        <div class="platform-card"><div class="platform-icon">🐧</div><div class="platform-name">Debian / Ubuntu</div><div class="platform-desc" data-i18n="plat_deb">APT-пакеты + PPA — полная поддержка</div></div>
+        <div class="platform-card"><div class="platform-icon">📦</div><div class="platform-name">Arch Linux</div><div class="platform-desc" data-i18n="plat_arch">AUR / Pacman — установка одной командой</div></div>
+        <div class="platform-card"><div class="platform-icon">🌀</div><div class="platform-name">Fedora</div><div class="platform-desc" data-i18n="plat_fedora">DNF-репозитории — протестировано на 38+</div></div>
+        <div class="platform-card"><div class="platform-icon">🐌</div><div class="platform-name">openSUSE</div><div class="platform-desc" data-i18n="plat_suse">Zypper — стабильная работа</div></div>
+        <div class="platform-card"><div class="platform-icon">🍎</div><div class="platform-name">macOS</div><div class="platform-desc" data-i18n="plat_mac">Homebrew — всё через Brewfile</div></div>
+        <div class="platform-card"><div class="platform-icon">🪟</div><div class="platform-name">WSL</div><div class="platform-desc" data-i18n="plat_wsl">Windows Subsystem Linux — полная совместимость</div></div>
+        <div class="platform-card"><div class="platform-icon">💚</div><div class="platform-name">Git Bash</div><div class="platform-desc" data-i18n="plat_gitbash">Windows Git Bash — базовая функциональность</div></div>
+    </div>
+
+    <h2 class="section-title" data-i18n="hotkeySection">⌨️ Горячие клавиши</h2>
+    <div class="hotkeys-grid">
+        <div class="hotkey-item"><kbd>Ctrl</kbd>+<kbd>R</kbd><span class="hotkey-desc" data-i18n="hk_fzf">Нечеткий поиск по истории (FZF)</span></div>
+        <div class="hotkey-item"><kbd>Ctrl</kbd>+<kbd>F</kbd><span class="hotkey-desc" data-i18n="hk_fzf_file">Поиск файлов в текущей директории (FZF)</span></div>
+        <div class="hotkey-item"><kbd>z</kbd> <span class="hotkey-desc" data-i18n="hk_zoxide">Быстрый переход в любимые директории</span></div>
+        <div class="hotkey-item"><kbd>Ctrl</kbd>+<kbd>G</kbd><span class="hotkey-desc" data-i18n="hk_lazygit">Запустить Lazygit TUI</span></div>
+        <div class="hotkey-item"><kbd>Ctrl</kbd>+<kbd>T</kbd><span class="hotkey-desc" data-i18n="hk_btop">Запустить Btop монитор</span></div>
+        <div class="hotkey-item"><kbd>Ctrl</kbd>+<kbd>K</kbd><span class="hotkey-desc" data-i18n="hk_kmon">Запустить Kmon (мониторинг ядра)</span></div>
+        <div class="hotkey-item"><kbd>Tab</kbd> <span class="hotkey-desc" data-i18n="hk_tab">Умное автодополнение команд (Zsh)</span></div>
+        <div class="hotkey-item"><kbd>Ctrl</kbd>+<kbd>D</kbd><span class="hotkey-desc" data-i18n="hk_duf">Показать статистику дисков (Duf)</span></div>
+    </div>
+
     <footer>
+        <div class="footer-links">
+            <a href="https://github.com/M0NDsuChTiG/beautiful-terminal" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://github.com/M0NDsuChTiG/beautiful-terminal/blob/main/README.md" target="_blank" rel="noopener">README</a>
+            <a href="https://github.com/M0NDsuChTiG/beautiful-terminal/issues" target="_blank" rel="noopener">Issues</a>
+        </div>
         <p data-i18n="footer">Создано с любовью к открытому коду и терминалам. <br> Настроено с помощью <b>Gemini CLI</b> 🤖</p>
     </footer>
 </div>
 
-<!-- Modal -->
 <div class="modal" id="infoModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -314,7 +471,24 @@
             title: "Beautiful Terminal Bundle",
             subtitle: "Ультимативный набор для прокачки твоего Linux терминала до уровня PRO. <span class='badge'>Toolkits 1-9</span>",
             copyBtn: "Копировать команду",
-            copyAlert: "Команда скопирована! Вставьте её в терминал.",
+            featSection: "✨ Возможности",
+            platformSection: "💻 Поддерживаемые платформы",
+            hotkeySection: "⌨️ Горячие клавиши",
+            plat_deb: "APT-пакеты + PPA — полная поддержка",
+            plat_arch: "AUR / Pacman — установка одной командой",
+            plat_fedora: "DNF-репозитории — протестировано на 38+",
+            plat_suse: "Zypper — стабильная работа",
+            plat_mac: "Homebrew — всё через Brewfile",
+            plat_wsl: "Windows Subsystem Linux — полная совместимость",
+            plat_gitbash: "Windows Git Bash — базовая функциональность",
+            hk_fzf: "Нечеткий поиск по истории (FZF)",
+            hk_fzf_file: "Поиск файлов в текущей директории (FZF)",
+            hk_zoxide: "Быстрый переход в любимые директории",
+            hk_lazygit: "Запустить Lazygit TUI",
+            hk_btop: "Запустить Btop монитор",
+            hk_kmon: "Запустить Kmon (мониторинг ядра)",
+            hk_tab: "Умное автодополнение команд (Zsh)",
+            hk_duf: "Показать статистику дисков (Duf)",
             feat1_title: "🎨 Визуальный экстаз",
             feat1_desc: "Zsh с темой 'ys', иконки через LSD и подсветка синтаксиса делают работу приятной глазу.",
             feat2_title: "⚡ Скорость мысли",
@@ -347,7 +521,24 @@
             title: "Beautiful Terminal Bundle",
             subtitle: "The ultimate toolkit to level up your Linux terminal to PRO. <span class='badge'>Toolkits 1-9</span>",
             copyBtn: "Copy command",
-            copyAlert: "Command copied! Paste it into your terminal.",
+            featSection: "✨ Features",
+            platformSection: "💻 Supported Platforms",
+            hotkeySection: "⌨️ Hotkeys & Shortcuts",
+            plat_deb: "APT packages + PPA — full support",
+            plat_arch: "AUR / Pacman — one-command install",
+            plat_fedora: "DNF repos — tested on 38+",
+            plat_suse: "Zypper — stable operation",
+            plat_mac: "Homebrew — everything via Brewfile",
+            plat_wsl: "Windows Subsystem Linux — full compatibility",
+            plat_gitbash: "Windows Git Bash — basic functionality",
+            hk_fzf: "Fuzzy search through command history (FZF)",
+            hk_fzf_file: "Search files in current directory (FZF)",
+            hk_zoxide: "Jump to favorite directories instantly",
+            hk_lazygit: "Launch Lazygit TUI",
+            hk_btop: "Launch Btop resource monitor",
+            hk_kmon: "Launch Kmon (kernel monitoring)",
+            hk_tab: "Smart autocomplete (Zsh)",
+            hk_duf: "Show disk statistics (Duf)",
             feat1_title: "🎨 Visual Ecstasy",
             feat1_desc: "Zsh with 'ys' theme, LSD icons, and syntax highlighting make working a pleasure.",
             feat2_title: "⚡ Speed of Thought",
@@ -383,24 +574,26 @@
     function setLang(lang) {
         currentLang = lang;
         localStorage.setItem('lang', lang);
-        
-        // Update buttons
+
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
         });
 
-        // Update static text
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            el.innerHTML = translations[lang][key];
+            if (translations[lang][key] !== undefined) {
+                el.innerHTML = translations[lang][key];
+            }
         });
 
-        // Update page title
-        document.title = lang === 'ru' ? "Beautiful Terminal Bundle | Мощный. Красивый. Твой." : "Beautiful Terminal Bundle | Powerful. Beautiful. Yours.";
+        document.title = lang === 'ru'
+            ? "Beautiful Terminal Bundle | Мощный. Красивый. Твой."
+            : "Beautiful Terminal Bundle | Powerful. Beautiful. Yours.";
     }
 
     function openModal(id) {
         const data = translations[currentLang].modals[id];
+        if (!data) return;
         document.getElementById('modalBody').innerHTML = `<h2>${data.title}</h2>${data.content}`;
         document.getElementById('infoModal').style.display = 'flex';
     }
@@ -411,11 +604,19 @@
 
     function copyInstall() {
         const cmd = document.getElementById('install-cmd').innerText;
-        navigator.clipboard.writeText(cmd);
-        alert(translations[currentLang].copyAlert);
+        navigator.clipboard.writeText(cmd).then(() => {
+            const btn = document.getElementById('copy-btn');
+            btn.classList.add('copied');
+            btn.textContent = currentLang === 'ru' ? '✓ Скопировано!' : '✓ Copied!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.textContent = translations[currentLang].copyBtn;
+            }, 2000);
+        }).catch(() => {
+            alert(translations[currentLang].copyAlert || 'Copy failed');
+        });
     }
 
-    // Terminal logic (remains mostly same, could be localized too but usually console is EN)
     const terminal = document.getElementById('terminal');
     const lines = [
         { type: 'cmd', text: 'fastfetch' },
@@ -462,7 +663,11 @@
         }
     }
 
-    // Init language
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
     setLang(currentLang);
     type();
 </script>
