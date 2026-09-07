@@ -47,31 +47,58 @@ check_sudo() {
     fi
 }
 
-# --- Установка системных пакетов (идемпотентно) ---
+# --- Установка системных пакетов (идемпотентно, с пропуском недоступных) ---
 install_packages() {
     echo "📦 Установка зависимостей..."
     if [ "$PM" = "apt" ]; then
         sudo apt update
-        # Устанавливаем только недостающие пакеты
-        local missing=()
+        # Собираем только недостающие пакеты, отбрасывая те, которых нет в репозитории
+        local missing=() available=() skipped=()
         for pkg in $PACKAGES; do
             if ! dpkg -s "$pkg" &>/dev/null; then
                 missing+=("$pkg")
             fi
         done
-        if [ ${#missing[@]} -gt 0 ]; then
-            sudo apt install -y "${missing[@]}"
+        for pkg in "${missing[@]}"; do
+            if apt-cache show "$pkg" 2>/dev/null | grep -q "^Package: "; then
+                available+=("$pkg")
+            else
+                skipped+=("$pkg")
+            fi
+        done
+        if [ ${#skipped[@]} -gt 0 ]; then
+            echo "   ⚠️  Пропущены (нет в репозитории): ${skipped[*]}"
+        fi
+        if [ ${#available[@]} -gt 0 ]; then
+            sudo apt install -y "${available[@]}"
         else
-            echo "   Все пакеты уже установлены."
+            echo "   Все доступные пакеты уже установлены."
         fi
     elif [ "$PM" = "pacman" ]; then
         for pkg in $PACKAGES; do
-            if ! pacman -Qi "$pkg" &>/dev/null 2>&1; then
+            if pacman -Qi "$pkg" &>/dev/null 2>&1; then
+                continue
+            fi
+            if pacman -Si "$pkg" &>/dev/null 2>&1; then
                 sudo pacman -S --noconfirm "$pkg"
+            else
+                echo "   ⚠️  Пропущен $pkg (нет в репозитории)"
             fi
         done
     else
-        eval "$INSTALL_CMD $PACKAGES"
+        # dnf / zypper / brew: пробуем всё разом, при сбое — по одному, пропуская недоступные
+        if eval "$INSTALL_CMD $PACKAGES"; then
+            :
+        else
+            echo "   ⚠️  Массовая установка не удалась — пробуем пакеты по отдельности."
+            for pkg in $PACKAGES; do
+                if eval "$INSTALL_CMD $pkg" &>/dev/null; then
+                    echo "   ✓ $pkg"
+                else
+                    echo "   ⚠️  Пропущен $pkg (недоступен в репозитории)"
+                fi
+            done
+        fi
     fi
 }
 
@@ -135,6 +162,11 @@ install_asn() {
 apply_zshrc() {
     echo "⚙️  Применение .zshrc..."
     if [ -f "$BASEDIR/zshrc_template" ]; then
+        if [ -f "$HOME/.zshrc" ]; then
+            local backup="$HOME/.zshrc.bak.$(date +%Y%m%d-%H%M%S)"
+            cp "$HOME/.zshrc" "$backup"
+            echo "   💾 Резервная копия существующего .zshrc: $backup"
+        fi
         cp "$BASEDIR/zshrc_template" "$HOME/.zshrc"
     else
         echo "⚠️  zshrc_template не найден. Пропускаем."

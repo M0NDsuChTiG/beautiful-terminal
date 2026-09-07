@@ -68,6 +68,81 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
+
+        /* Демо-терминал */
+        .demo-terminal {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+            font-family: 'Fira Code', monospace;
+            overflow: hidden;
+        }
+        .demo-term-head {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #21262d;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .demo-term-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .demo-term-dot-red { background: #ff5f57; }
+        .demo-term-dot-yellow { background: #febc2e; }
+        .demo-term-dot-green { background: #28c840; }
+        .demo-term-title { color: #8b949e; font-size: 12px; margin-left: 0.5rem; letter-spacing: 0.05em; }
+        .demo-term-body {
+            padding: 1rem 1.25rem;
+            height: 380px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #e6edf3;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .demo-term-body::-webkit-scrollbar { width: 8px; }
+        .demo-term-body::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        .demo-term-input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-top: 1px solid #21262d;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .demo-term-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #e6edf3;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            caret-color: #3fb950;
+        }
+        .demo-term-input::placeholder { color: #484f58; }
+
+        /* Цвета ANSI-вывода демо-терминала (GitHub Dark палитра) */
+        .t-dim { color: #8b949e; }
+        .t-green { color: #3fb950; }
+        .t-blue { color: #58a6ff; }
+        .t-cyan { color: #39c5cf; }
+        .t-yellow { color: #d29922; }
+        .t-red { color: #f85149; }
+        .t-white { color: #e6edf3; }
+        .t-bold { font-weight: 700; }
+        .t-num { color: #e3b341; }
+        .t-dir { color: #58a6ff; font-weight: 700; }
+        .t-exe { color: #3fb950; }
+        .t-link { color: #39c5cf; }
+        .t-cmd { color: #3fb950; }
+        .t-flag { color: #79c0ff; }
+        .t-arg { color: #e6edf3; }
+        .t-prompt-user { color: #3fb950; }
+        .t-prompt-host { color: #8b949e; }
+        .t-prompt-path { color: #58a6ff; }
+        .t-prompt-sym { color: #3fb950; }
     </style>
 </head>
 <body class="antialiased">
@@ -83,6 +158,7 @@
             </div>
             <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-text-dim">
                 <a href="#philosophy" class="hover:text-emerald-400 transition">Концепция</a>
+                <a href="#demo" class="hover:text-emerald-400 transition">Демо</a>
                 <a href="#stats" class="hover:text-emerald-400 transition">Аналитика</a>
                 <a href="#catalog" class="hover:text-emerald-400 transition">Каталог утилит</a>
                 <a href="#mastery" class="hover:text-emerald-400 transition">Руководство</a>
@@ -105,7 +181,30 @@
                     <a href="#catalog" class="bg-emerald-500 hover:bg-emerald-400 text-black px-8 py-4 rounded-xl font-bold transition transform active:scale-95 shadow-lg shadow-emerald-500/20">Исследовать спецификации</a>
                     <div class="bg-card px-6 py-4 rounded-xl border border-white/5 flex items-center gap-3">
                         <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                        <span class="text-sm font-bold">Релиз 2.4.0 LTS</span>
+                        <span class="text-sm font-bold">Актуальная сборка</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция: Демо-терминал -->
+        <section id="demo" class="mb-32">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-4">Демо-терминал</h2>
+                <p class="text-text-dim max-w-2xl">Попробуйте команды бандла прямо в браузере: <span class="font-mono text-emerald-500">fastfetch</span>, <span class="font-mono text-emerald-500">ls -la</span>, <span class="font-mono text-emerald-500">btop</span> и другие. Наберите <span class="font-mono text-emerald-500">help</span> / <span class="font-mono text-emerald-500">помощь</span>, чтобы увидеть все команды.</p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <div class="demo-terminal" id="demo-terminal">
+                    <div class="demo-term-head">
+                        <span class="demo-term-dot demo-term-dot-red"></span>
+                        <span class="demo-term-dot demo-term-dot-yellow"></span>
+                        <span class="demo-term-dot demo-term-dot-green"></span>
+                        <span class="demo-term-title">dev@beautiful — zsh</span>
+                    </div>
+                    <div class="demo-term-body" id="demo-term-body"></div>
+                    <div class="demo-term-input-row">
+                        <span id="demo-term-prompt"></span>
+                        <input type="text" id="demo-term-input" class="demo-term-input" autocomplete="off" spellcheck="false" aria-label="Введите команду">
                     </div>
                 </div>
             </div>
@@ -198,7 +297,7 @@
             <div class="inline-flex flex-col items-center gap-6">
                 <div class="bg-card border border-emerald-500/30 px-8 py-6 rounded-3xl flex items-center gap-6 font-mono text-emerald-400 group relative cursor-pointer" onclick="copyInstall()">
                     <span class="text-text-dim select-none">$</span>
-                    <span id="install-cmd">curl -sSL install.beautiful.sh | bash</span>
+                    <span id="install-cmd">git clone https://github.com/M0NDsuChTiG/beautiful-terminal.git && cd beautiful-terminal && bash install.sh</span>
                     <i class="fa-regular fa-copy opacity-40 group-hover:opacity-100 transition"></i>
                     
                     <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-emerald-500 text-black text-xs font-bold py-2 px-4 rounded-lg opacity-0 transition-opacity pointer-events-none" id="copy-toast">
@@ -281,7 +380,6 @@
             { id: 'lazygit', name: 'lazygit', cat: 'dev', lang: 'Go', icon: 'fa-code-branch', color: 'orange', old: 'git commit -m "..."', new: 'lg', desc: 'Многооконный консольный интерфейс для управления репозиториями Git. Оптимизирует рутинные процессы фиксации изменений, разрешения конфликтов слияния и интерактивного перебазирования (rebase).' },
             { id: 'micro', name: 'micro', cat: 'dev', lang: 'Go', icon: 'fa-keyboard', color: 'purple', old: 'nano / vim', new: 'micro', desc: 'Терминальный текстовый редактор с поддержкой современных соглашений ввода-вывода. Включает нативную интеграцию с системным буфером обмена, обработку мыши и гибкие механизмы плагинов.' },
             { id: 'tealdeer', name: 'tldr', cat: 'dev', lang: 'Rust', icon: 'fa-graduation-cap', color: 'cyan', old: 'man tar', new: 'tldr tar', desc: 'Автономный клиент справочной системы tldr на Rust. Извлекает только практические, применимые сценарии использования утилит, заменяя чтение избыточных системных мануалов.' },
-            { id: 'file-org', name: 'organizer', cat: 'dev', lang: 'C++20', icon: 'fa-sitemap', color: 'yellow', old: '[manual move]', new: 'file-organizer', desc: 'Автоматизированный инструмент упорядочивания неструктурированных файловых массивов на базе C++20. Сортирует файлы по типам данных и метаданным в соответствии с заданным набором правил.' },
 
             { id: 'autosuggest', name: 'suggest', cat: 'net', lang: 'Zsh', icon: 'fa-wand-magic-sparkles', color: 'indigo', old: '[typing...]', new: '[gray hints]', desc: 'Модуль упреждающего ввода команд на основе истории сессии Zsh. Минимизирует количество нажатий клавиш, предлагая релевантные конструкции автодополнения в реальном времени.' },
             { id: 'highlight', name: 'syntax', cat: 'net', lang: 'Zsh', icon: 'fa-palette', color: 'pink', old: '[white text]', new: '[green/red]', desc: 'Плагин подсветки и статического анализа синтаксиса в процессе ввода. Валидирует правильность команд до вызова системного прерывания (Enter).' },
@@ -448,11 +546,243 @@
             });
         }
 
+        // --- ДЕМО-ТЕРМИНАЛ (интерактивная демонстрация команд) ---
+        function initDemoTerminal() {
+            const body = document.getElementById('demo-term-body');
+            const input = document.getElementById('demo-term-input');
+            const promptEl = document.getElementById('demo-term-prompt');
+            if (!body || !input || !promptEl) return;
+
+            let cwd = '~';
+            const history = [];
+            let histIdx = 0;
+
+            const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const span = (cls, txt) => '<span class="' + cls + '">' + txt + '</span>';
+
+            const promptHTML = () =>
+                span('t-prompt-user', 'dev') + span('t-prompt-host', '@beautiful') + ':' +
+                span('t-prompt-path', esc(cwd)) + span('t-prompt-sym', '$');
+
+            function addLine(html) {
+                const div = document.createElement('div');
+                div.className = 'term-line';
+                div.innerHTML = html;
+                body.appendChild(div);
+                body.scrollTop = body.scrollHeight;
+            }
+
+            function cmdHTML(cmd) {
+                const parts = cmd.trim().split(/\s+/);
+                const first = span('t-cmd', esc(parts[0]));
+                const rest = parts.slice(1).map((p) => span(p.startsWith('-') ? 't-flag' : 't-arg', esc(p))).join(' ');
+                return rest ? first + ' ' + rest : first;
+            }
+
+            // --- реалистичный цветной вывод для каждой команды ---
+            const OUTPUT = {
+                fastfetch: function () {
+                    const logo = [
+                        '    ████ ████   ',
+                        '    ██   ██     ',
+                        '    ████ ████   ',
+                        '    ██   ██     ',
+                        '    ████ ████   '
+                    ];
+                    const info = [
+                        ['OS', 'Ubuntu 24.04 LTS x86_64'],
+                        ['Host', 'ThinkPad X1 Carbon Gen 11'],
+                        ['Kernel', '6.8.0-45-generic'],
+                        ['Uptime', '2 hours, 14 mins'],
+                        ['Packages', '1876 (apt)'],
+                        ['Shell', 'zsh 5.9'],
+                        ['Resolution', '2560x1440'],
+                        ['DE', 'GNOME'],
+                        ['Terminal', 'xterm-256color'],
+                        ['CPU', '13th Gen Intel i7-1365U (12) @ 5.2GHz'],
+                        ['GPU', 'Intel Iris Xe'],
+                        ['Memory', '3.41 GiB / 31.05 GiB']
+                    ];
+                    const lines = [];
+                    // первая строка — логотип и приглашение
+                    lines.push(span('t-green', logo[0].slice(0, 10)) + span('t-blue', logo[0].slice(10)) + span('t-white t-bold', 'dev@beautiful'));
+                    // затем все строки информации (включая OS)
+                    for (let i = 0; i < info.length; i++) {
+                        const art = i < logo.length - 1 ? logo[i + 1] : '    ████ ████   ';
+                        lines.push(
+                            span('t-green', art.slice(0, 10)) + span('t-blue', art.slice(10)) + '  ' +
+                            span('t-blue', info[i][0] + ':') + ' ' + span('t-white', info[i][1])
+                        );
+                    }
+                    return lines;
+                },
+
+                ls: function () {
+                    const row = (perm, size, date, nameCls, name) =>
+                        span('t-dim', perm) + ' ' + span('t-dim', 'dev') + ' ' + span('t-dim', 'staff') + '  ' +
+                        span('t-num', size) + ' ' + span('t-dim', date) + '  ' + span(nameCls, name);
+                    return [
+                        row('drwxr-xr-x', '4.0 KB', 'Sep  7 10:23', 't-dir', '.'),
+                        row('drwxr-xr-x', '6.0 KB', 'Sep  7 09:11', 't-dir', '..'),
+                        row('-rw-r--r--', '1.2 KB', 'Sep  7 10:20', 't-dim', '.zshrc'),
+                        row('-rw-r--r--', '2.6 KB', 'Sep  7 10:21', 't-white', 'zshrc_template'),
+                        row('-rwxr-xr-x', '8.4 KB', 'Sep  7 10:21', 't-exe', 'install.sh'),
+                        row('drwxr-xr-x', '4.0 KB', 'Sep  7 10:21', 't-dir', 'plugins'),
+                        row('-rw-r--r--', '6.1 KB', 'Sep  7 10:22', 't-white', 'README.md'),
+                        row('-rw-r--r--', '36.5 KB', 'Sep  7 10:22', 't-white', 'New'),
+                        row('lrwxrwxrwx', '12 B', 'Sep  7 10:23', 't-link', 'asn -> /usr/local/bin/asn')
+                    ];
+                },
+
+                ps: function () {
+                    const head = () => span('t-bold t-dim', ' PID USER CPU% MEM%  RSS  START  TTY TIME COMMAND');
+                    const row = (pid, user, cpu, mem, rss, start, tty, time, cmd) =>
+                        ' ' + span('t-num', pid) + ' ' + span('t-cyan', user) + ' ' + span('t-num', cpu) + ' ' + span('t-num', mem) + ' ' + span('t-num', rss) + ' ' + span('t-dim', start) + ' ' + span('t-dim', tty) + ' ' + span('t-dim', time) + ' ' + span('t-white', cmd);
+                    return [
+                        head(),
+                        row('1', 'root', '0.0', '0.1', '1.6M', 'Sep07', '?', '00:00', 'systemd'),
+                        row('812', 'dev', '1.2', '3.4', '84M', 'Sep07', 'pts/0', '00:12', 'node dev-server.js'),
+                        row('830', 'dev', '0.4', '1.1', '24M', 'Sep07', 'pts/0', '00:12', 'zsh'),
+                        row('891', 'dev', '3.2', '5.6', '132M', 'Sep07', 'pts/0', '00:13', 'btop')
+                    ];
+                },
+
+                z: function () {
+                    return [
+                        span('t-dim', 'zoxide: ') + span('t-white', 'cd ~/Downloads'),
+                        span('t-dir', '~/Downloads')
+                    ];
+                },
+
+                btop: function () {
+                    const gauge = (pct, w) => {
+                        const filled = Math.round((pct / 100) * w);
+                        const cls = pct < 60 ? 't-green' : pct < 85 ? 't-yellow' : 't-red';
+                        return span(cls, '█'.repeat(filled)) + span('t-dim', '░'.repeat(w - filled));
+                    };
+                    return [
+                        span('t-cyan', 'cpu') + ' ' + gauge(48, 16) + ' ' + span('t-num', '48%') + span('t-dim', ' (12 cores)'),
+                        span('t-cyan', 'mem') + ' ' + gauge(32, 16) + ' ' + span('t-num', '32%') + span('t-dim', ' (31.0G)'),
+                        span('t-cyan', 'net') + ' ' + span('t-red', '▼ 1.2 MiB/s') + span('t-dim', '   ') + span('t-green', '▲ 4.8 MiB/s'),
+                        span('t-cyan', 'dis') + ' ' + gauge(47, 16) + ' ' + span('t-num', '47%') + span('t-dim', ' (458G)')
+                    ];
+                },
+
+                lazygit: function () {
+                    return [
+                        span('t-bold t-dim', 'STATUS') + span('t-dim', ' | ') + span('t-bold t-dim', 'LOG') + span('t-dim', ' | ') + span('t-bold t-dim', 'BRANCH'),
+                        span('t-dim', '──────────────────────────────'),
+                        span('t-red', ' M ') + span('t-white', 'zshrc_template') + span('t-dim', '    modified'),
+                        span('t-green', ' A ') + span('t-white', 'New/index.html') + span('t-dim', '   new file'),
+                        span('t-yellow', '?? ') + span('t-white', 'backup/') + span('t-dim', '         untracked')
+                    ];
+                },
+
+                tldr: function () {
+                    const ex = (cmd, desc) =>
+                        span('t-dim', '  - ') + span('t-white', desc) + '\n' +
+                        span('t-cyan', '    ' + cmd);
+                    return [
+                        span('t-green t-bold', 'bat'),
+                        '',
+                        span('t-dim', 'Print and concatenate files with syntax highlighting.'),
+                        '',
+                        span('t-bold t-white', 'Examples:'),
+                        ex('bat file.txt', 'Print a file'),
+                        ex('bat -n file.txt', 'Show line numbers'),
+                        ex('bat -l json config.json', 'Force syntax highlighting'),
+                        '',
+                        span('t-dim', 'See: ') + span('t-link', 'https://github.com/sharkdp/bat')
+                    ];
+                },
+
+                df: function () {
+                    const row = (fs, size, used, avail, pct, mount) =>
+                        span('t-white', fs) + ' ' + span('t-num', size) + ' ' + span('t-num', used) + ' ' + span('t-num', avail) + ' ' + span(pct < 60 ? 't-green' : pct < 85 ? 't-yellow' : 't-red', pct + '%') + ' ' + span('t-dir', mount);
+                    return [
+                        span('t-bold t-dim', 'Filesystem     Size  Used  Avail  Use%  Mounted on'),
+                        row('/dev/nvme0n1p2', '458G', '212G', '224G', '47', '/'),
+                        row('tmpfs', '32G', '2.1G', '30G', '7', '/tmp')
+                    ];
+                },
+
+                help: function (ru) {
+                    const items = ru
+                        ? [['fastfetch', 'информация о системе'], ['ls -la', 'список файлов'], ['ps', 'список процессов'], ['z Downloads', 'перейти в ~/Downloads'], ['btop', 'монитор ресурсов'], ['lazygit', 'интерфейс Git'], ['tldr bat', 'справка по bat'], ['df', 'использование диска'], ['очистить', 'очистить экран'], ['помощь', 'показать справку']]
+                        : [['fastfetch', 'system information'], ['ls -la', 'list files'], ['ps', 'process list'], ['z Downloads', 'jump to ~/Downloads'], ['btop', 'resource monitor'], ['lazygit', 'git TUI'], ['tldr bat', 'bat cheat sheet'], ['df', 'disk usage'], ['clear', 'clear screen'], ['help', 'show this help']];
+                    return [span('t-bold t-white', ru ? 'Доступные команды:' : 'Available commands:')].concat(
+                        items.map((it) => '  ' + span('t-cmd', it[0]) + ' '.repeat(Math.max(1, 16 - it[0].length)) + span('t-dim', it[1]))
+                    );
+                }
+            };
+
+            function run(cmdRaw) {
+                const cmd = cmdRaw.trim().replace(/\s+/g, ' ');
+                addLine(promptHTML() + ' ' + (cmd ? cmdHTML(cmd) : ''));
+                if (!cmd) return;
+                history.push(cmd);
+                histIdx = history.length;
+                const key = cmd.toLowerCase();
+                const zKey = key === 'z downloads' || key === 'z загрузки';
+                if (key === 'clear' || key === 'очистить') {
+                    body.innerHTML = '';
+                    addLine(promptHTML());
+                } else if (key === 'help' || key === 'помощь' || key === 'справка') {
+                    OUTPUT.help(key !== 'help').forEach(addLine);
+                } else if (key === 'fastfetch') {
+                    OUTPUT.fastfetch().forEach(addLine);
+                } else if (key === 'ls' || key === 'ls -la') {
+                    OUTPUT.ls().forEach(addLine);
+                } else if (key === 'ps') {
+                    OUTPUT.ps().forEach(addLine);
+                } else if (zKey) {
+                    OUTPUT.z().forEach(addLine);
+                    cwd = '~/Downloads';
+                } else if (key === 'btop') {
+                    OUTPUT.btop().forEach(addLine);
+                } else if (key === 'lazygit' || key === 'lg') {
+                    OUTPUT.lazygit().forEach(addLine);
+                } else if (key === 'tldr' || key === 'tldr bat') {
+                    OUTPUT.tldr().forEach(addLine);
+                } else if (key === 'df') {
+                    OUTPUT.df().forEach(addLine);
+                } else {
+                    addLine(span('t-red', 'zsh: command not found: ' + esc(cmd.split(' ')[0])));
+                }
+                // держим живое приглашение в строке ввода в синхроне с cwd (например, после `z Downloads`)
+                promptEl.innerHTML = promptHTML();
+            }
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    run(input.value);
+                    input.value = '';
+                } else if (e.key === 'ArrowUp') {
+                    if (histIdx > 0) { histIdx--; input.value = history[histIdx]; }
+                    e.preventDefault();
+                } else if (e.key === 'ArrowDown') {
+                    if (histIdx < history.length - 1) { histIdx++; input.value = history[histIdx]; }
+                    else { histIdx = history.length; input.value = ''; }
+                    e.preventDefault();
+                }
+            });
+
+            promptEl.innerHTML = promptHTML();
+            const term = document.getElementById('demo-terminal');
+            if (term) {
+                term.addEventListener('click', () => input.focus());
+            }
+            input.focus();
+            // стартовый вывод, как в zshrc_template (fastfetch при запуске шелла)
+            run('fastfetch');
+        }
+
         // --- ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ ---
         document.addEventListener('DOMContentLoaded', () => {
             renderTools();
             renderMastery();
             initCharts();
+            initDemoTerminal();
 
             // Обработчики фильтров
             document.querySelectorAll('.filter-btn').forEach(btn => {

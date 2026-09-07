@@ -103,18 +103,38 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls="lsd"
-alias cat="batcat --paging=never"
+# На Debian/Ubuntu bat называется batcat, в остальных дистрибутивах — bat
+if command -v batcat >/dev/null 2>&1; then
+    alias cat="batcat --paging=never"
+elif command -v bat >/dev/null 2>&1; then
+    alias cat="bat --paging=never"
+fi
 alias top="btop"
 
-# FZF integration
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
-[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+# FZF integration (пути к биндингам различаются в зависимости от дистрибутива)
+if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+    [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+elif [ -f /usr/share/fzf/key-bindings.zsh ]; then
+    source /usr/share/fzf/key-bindings.zsh
+    [ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+elif [ -f /usr/share/fzf/shell/key-bindings.zsh ]; then
+    source /usr/share/fzf/shell/key-bindings.zsh
+    [ -f /usr/share/fzf/shell/completion.zsh ] && source /usr/share/fzf/shell/completion.zsh
+elif [ -f "$(brew --prefix 2>/dev/null)/opt/fzf/shell/key-bindings.zsh" ]; then
+    source "$(brew --prefix 2>/dev/null)/opt/fzf/shell/key-bindings.zsh"
+    [ -f "$(brew --prefix 2>/dev/null)/opt/fzf/shell/completion.zsh" ] && source "$(brew --prefix 2>/dev/null)/opt/fzf/shell/completion.zsh"
+fi
 
 # Zoxide initialization
 eval "$(zoxide init zsh)"
 
-# FD alias (Ubuntu specific name fix)
-alias fd='fdfind'
+# На Debian/Ubuntu fd называется fdfind, в остальных дистрибутивах — fd
+if command -v fdfind >/dev/null 2>&1; then
+    alias fd='fdfind'
+elif command -v fd >/dev/null 2>&1; then
+    alias fd='fd'
+fi
 
 # Toolkits 9 aliases
 alias lg="lazygit"
