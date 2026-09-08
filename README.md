@@ -120,6 +120,14 @@ $ bash install.sh
   многоцветным выводом для команд fastfetch, ls -la, ps, z Downloads, btop,
   lazygit, tldr bat, df, clear, help (поддерживаются и русские аналоги:
   помощь, очистить, z Загрузки).
+- **Убраны из списка последних изменений инструменты, которых нет в install.sh:**
+  `mtr` (скрипт устанавливает `mtr-tiny`/`mtr`, а не отдельный `mtr` как
+  диагностический фреймворк), `htop`, `glances`, `ncdu`, `nethogs`,
+  `iftop`, `speedometer`, `vnstat`, `tcptraceroute`, `netcat`.
+- **В списке «Состав бандла» оставлено только то, что скрипт реально
+  устанавливает/настраивает:** Zsh + Oh My Zsh, плагины,
+  Tealdeer (tldr), LSD, Bat, FZF, Btop, Kmon, Fastfetch, Lazygit, Duf,
+  Micro, Procs, Zoxide, FD, GRC, ASN, тема `ys`.
 
 ## Разработка
 
