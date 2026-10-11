@@ -102,6 +102,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+<<<<<<< HEAD
 alias ls="lsd"
 # На Debian/Ubuntu bat называется batcat, в остальных дистрибутивах — bat
 if command -v batcat >/dev/null 2>&1; then
@@ -124,16 +125,68 @@ elif [ -f /usr/share/fzf/shell/key-bindings.zsh ]; then
 elif [ -f "$(brew --prefix 2>/dev/null)/opt/fzf/shell/key-bindings.zsh" ]; then
     source "$(brew --prefix 2>/dev/null)/opt/fzf/shell/key-bindings.zsh"
     [ -f "$(brew --prefix 2>/dev/null)/opt/fzf/shell/completion.zsh" ] && source "$(brew --prefix 2>/dev/null)/opt/fzf/shell/completion.zsh"
+=======
+# Алиасы — платформо-независимо через command -v.
+# На Debian/Ubuntu bat и fd ставятся как batcat/fdfind, поэтому пробуем
+# оба имени и включаем алиас только при наличии бинарника.
+if command -v bat >/dev/null 2>&1; then
+  alias cat="bat --paging=never"
+elif command -v batcat >/dev/null 2>&1; then
+  alias cat="batcat --paging=never"
 fi
 
-# Zoxide initialization
-eval "$(zoxide init zsh)"
+if command -v lsd >/dev/null 2>&1; then
+  alias ls="lsd"
+>>>>>>> 9150f4c (fix: make zshrc_template platform-independent via command -v)
+fi
 
+if command -v btop >/dev/null 2>&1; then
+  alias top="btop"
+fi
+
+<<<<<<< HEAD
 # На Debian/Ubuntu fd называется fdfind, в остальных дистрибутивах — fd
 if command -v fdfind >/dev/null 2>&1; then
     alias fd='fdfind'
 elif command -v fd >/dev/null 2>&1; then
     alias fd='fd'
+=======
+# FD: на Debian/Ubuntu бинарник называется fdfind — алиас нужен
+# только когда команды fd в системе ещё нет.
+if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
+  alias fd="fdfind"
+fi
+
+# FZF integration: пути key-bindings/completion различаются по дистрибутивам
+# (Debian /usr/share/doc/fzf/examples, Arch /usr/share/fzf, Fedora
+# /usr/share/fzf/shell, openSUSE /etc/fzf, Homebrew opt/fzf/shell).
+# Сорсим первую папку, где есть хоть один из файлов.
+if command -v fzf >/dev/null 2>&1; then
+  _fzf_brew="$(brew --prefix 2>/dev/null)/opt/fzf/shell"
+  for _fzf_dir in \
+    /usr/share/doc/fzf/examples \
+    /usr/share/fzf/shell \
+    /usr/share/fzf \
+    /etc/fzf \
+    "$_fzf_brew"
+  do
+    if [ -f "$_fzf_dir/key-bindings.zsh" ]; then
+      source "$_fzf_dir/key-bindings.zsh"
+    fi
+    if [ -f "$_fzf_dir/completion.zsh" ]; then
+      source "$_fzf_dir/completion.zsh"
+    fi
+    if [ -f "$_fzf_dir/key-bindings.zsh" ] || [ -f "$_fzf_dir/completion.zsh" ]; then
+      break
+    fi
+  done
+  unset _fzf_brew _fzf_dir
+fi
+
+# Zoxide initialization (только если установлен)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+>>>>>>> 9150f4c (fix: make zshrc_template platform-independent via command -v)
 fi
 
 # Toolkits 9 aliases
@@ -141,7 +194,9 @@ alias lg="lazygit"
 alias df="duf"
 alias ps="procs"
 
-# Startup info
-fastfetch
+# Startup info (только если установлен)
+if command -v fastfetch >/dev/null 2>&1; then
+  fastfetch
+fi
 
 export TERM="xterm-256color"
